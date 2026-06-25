@@ -62,6 +62,16 @@ data:extend({
         maximum_value = 10000,
         order = "f"
     },
+    -- Fuel
+    {
+        type = "int-setting",
+        name = "mhh-stacksize-fuel",
+        setting_type = "startup",
+        default_value = 50,  -- Factorio default for fuel items
+        minimum_value = 1,
+        maximum_value = 10000,
+        order = "g"
+    },
     -- Ammunition
     {
         type = "int-setting",
@@ -70,7 +80,7 @@ data:extend({
         default_value = 200,  -- Factorio default for ammo
         minimum_value = 1,
         maximum_value = 10000,
-        order = "g"
+        order = "h"
     },
     -- Modules
     {
@@ -80,7 +90,7 @@ data:extend({
         default_value = 50,  -- Factorio default for modules
         minimum_value = 1,
         maximum_value = 10000,
-        order = "h"
+        order = "i"
     },
     -- Other items (default for everything else)
     {
@@ -90,6 +100,6 @@ data:extend({
         default_value = 100,  -- Factorio default for misc items
         minimum_value = 1,
         maximum_value = 10000,
-        order = "i"
+        order = "j"
     },
 })

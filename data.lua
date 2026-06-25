@@ -8,6 +8,7 @@ local ingots_stack = settings.startup["mhh-stacksize-ingots"].value
 local intermediates_stack = settings.startup["mhh-stacksize-intermediates"].value
 local science_stack = settings.startup["mhh-stacksize-science"].value
 local barrels_stack = settings.startup["mhh-stacksize-barrels"].value
+local fuel_stack = settings.startup["mhh-stacksize-fuel"].value
 local ammo_stack = settings.startup["mhh-stacksize-ammo"].value
 local modules_stack = settings.startup["mhh-stacksize-modules"].value
 local other_stack = settings.startup["mhh-stacksize-other"].value
@@ -71,6 +72,8 @@ local excluded_items = {
     ["se-arcosphere-h"] = true,
     ["se-arcosphere-collector"] = true,
     ["se-navigation-satellite"] = true,
+    ["se-star-probe"] = true,
+    ["se-void-probe"] = true,
 }
 
 local plates = {
@@ -207,6 +210,11 @@ local function get_stack_size_for_item(name, item, item_type)
     -- Check if it's a barrel
     if string.find(name, "barrel") or (item.subgroup and item.subgroup == "fill-barrel") then
         return barrels_stack
+    end
+    
+    -- Check if it's fuel (by subgroup)
+    if item.subgroup and item.subgroup == "fuel" then
+        return fuel_stack
     end
     
     -- Default to other
