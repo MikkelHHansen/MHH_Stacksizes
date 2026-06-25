@@ -58,6 +58,17 @@ local raw_materials = {
     ["raw-fish"] = true,
 }
 
+-- Items that should use default stack size (not be modified)
+local excluded_items = {
+    ["se-arcosphere"] = true,
+    ["se-arcosphere-a"] = true,
+    ["se-arcosphere-b"] = true,
+    ["se-arcosphere-c"] = true,
+    ["se-arcosphere-d"] = true,
+    ["se-arcosphere-collector"] = true,
+    ["se-navigation-satellite"] = true,
+}
+
 local plates = {
     ["iron-plate"] = true,
     ["copper-plate"] = true,
@@ -87,7 +98,12 @@ local intermediates = {
 }
 
 -- Function to check if an item should be excluded
-local function should_exclude(item)
+local function should_exclude(item, name)
+    -- Check if item is in excluded items list
+    if excluded_items[name] then
+        return true
+    end
+    
     -- Check if it's marked as not stackable (like red-wire, green-wire)
     if item.flags then
         for _, flag in pairs(item.flags) do
@@ -138,11 +154,16 @@ local function get_stack_size_for_item(name, item, item_type)
         return ingots_stack
     end
     
+    -- Check if it's explicitly in raw materials list (includes stone, coal, etc.)
+    -- Must check BEFORE plates to prevent stone from being categorized as plate
+    if raw_materials[name] then
+        return raw_materials_stack
+    end
+    
     -- Check if it's a raw material (ore)
     -- Pattern: ends with "-ore", contains "ore-", or is in raw-resource subgroup
     -- Also includes SE special materials (vitamelange, vulcanite, cryonite when not processed)
     if string.find(name, "%-ore$") or string.find(name, "ore%-") or
-       raw_materials[name] or
        (item.subgroup and (
            string.find(item.subgroup, "raw%-resource") or
            string.find(item.subgroup, "%-ore") or
@@ -212,10 +233,11 @@ for _, item_type in pairs(item_types) do
             -- Skip if this type is excluded
             if not excluded_types[item_type] then
                 -- Check if individual item should be excluded
-                if not should_exclude(item) then
+                if not should_exclude(item, name) then
                     -- Set the stack size based on item category
                     if item.stack_size then
                         -- For science packs (tools), use science stack size
+                        -- Includes space-science-pack
                         if item_type == "tool" then
                             item.stack_size = science_stack
                         -- For SE data items (used in research), use science stack size
