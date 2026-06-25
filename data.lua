@@ -69,6 +69,15 @@ local intermediates = {
 
 -- Function to check if an item should be excluded
 local function should_exclude(item)
+    -- Check if it's marked as not stackable (like red-wire, green-wire)
+    if item.flags then
+        for _, flag in pairs(item.flags) do
+            if flag == "not-stackable" then
+                return true
+            end
+        end
+    end
+    
     -- Check if it's a building or vehicle (has place_result)
     if item.place_result then
         return true
