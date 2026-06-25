@@ -4,6 +4,7 @@
 -- Get settings values
 local raw_materials_stack = settings.startup["mhh-stacksize-raw-materials"].value
 local plates_stack = settings.startup["mhh-stacksize-plates"].value
+local ingots_stack = settings.startup["mhh-stacksize-ingots"].value
 local intermediates_stack = settings.startup["mhh-stacksize-intermediates"].value
 local science_stack = settings.startup["mhh-stacksize-science"].value
 local barrels_stack = settings.startup["mhh-stacksize-barrels"].value
@@ -33,6 +34,17 @@ local excluded_subgroups = {
     ["energy-pipe-distribution"] = true,-- Power poles
     ["belt"] = true,                    -- Transport belts (placeable)
     ["inserter"] = true,                -- Inserters (placeable)
+}
+
+-- Space Exploration material subgroups for raw materials
+local se_material_subgroups = {
+    ["beryllium"] = true,
+    ["holmium"] = true,
+    ["iridium"] = true,
+    ["naquium"] = true,
+    ["cryonite"] = true,
+    ["vulcanite"] = true,
+    ["vitamelange"] = true,
 }
 
 -- Category definitions for different item types
@@ -120,18 +132,44 @@ local function get_stack_size_for_item(name, item, item_type)
         return modules_stack
     end
     
-    -- Check if it's a raw material
-    if raw_materials[name] or (item.subgroup and string.find(item.subgroup, "raw%-resource")) then
+    -- Check if it's an ingot (by name pattern)
+    -- Must check BEFORE plates since ingots are similar to plates
+    if string.find(name, "%-ingot$") or string.find(name, "ingot%-") then
+        return ingots_stack
+    end
+    
+    -- Check if it's a raw material (ore)
+    -- Pattern: ends with "-ore", contains "ore-", or is in raw-resource subgroup
+    -- Also includes SE special materials (vitamelange, vulcanite, cryonite when not processed)
+    if string.find(name, "%-ore$") or string.find(name, "ore%-") or
+       raw_materials[name] or
+       (item.subgroup and (
+           string.find(item.subgroup, "raw%-resource") or
+           string.find(item.subgroup, "%-ore") or
+           se_material_subgroups[item.subgroup]
+       )) then
         return raw_materials_stack
     end
     
     -- Check if it's a plate
-    if plates[name] or (item.subgroup and (item.subgroup == "raw-material" or string.find(item.subgroup, "plate"))) then
+    -- Pattern: ends with "-plate" or is in plates list
+    if string.find(name, "%-plate$") or
+       plates[name] or 
+       (item.subgroup and (item.subgroup == "raw-material" or string.find(item.subgroup, "plate"))) then
         return plates_stack
     end
     
     -- Check if it's an intermediate product
-    if intermediates[name] or (item.subgroup and string.find(item.subgroup, "intermediate%-product")) then
+    -- Includes: circuits, gears, powders, crushed materials, crystals, sulfates, chlorides, etc.
+    if string.find(name, "%-powder$") or 
+       string.find(name, "%-crushed$") or
+       string.find(name, "%-crystal$") or 
+       string.find(name, "%-sulfate$") or
+       string.find(name, "%-chloride$") or
+       string.find(name, "%-blastcake$") or
+       string.find(name, "%-rod$") or
+       intermediates[name] or 
+       (item.subgroup and string.find(item.subgroup, "intermediate%-product")) then
         return intermediates_stack
     end
     

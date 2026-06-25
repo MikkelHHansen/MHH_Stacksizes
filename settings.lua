@@ -22,6 +22,16 @@ data:extend({
         maximum_value = 10000,
         order = "b"
     },
+    -- Ingots
+    {
+        type = "int-setting",
+        name = "mhh-stacksize-ingots",
+        setting_type = "startup",
+        default_value = 50,  -- Factorio/SE default for ingots
+        minimum_value = 1,
+        maximum_value = 10000,
+        order = "c"
+    },
     -- Intermediate products (circuits, gears, etc.)
     {
         type = "int-setting",
@@ -30,7 +40,7 @@ data:extend({
         default_value = 200,  -- Factorio default for most intermediates
         minimum_value = 1,
         maximum_value = 10000,
-        order = "c"
+        order = "d"
     },
     -- Science packs
     {
@@ -40,7 +50,7 @@ data:extend({
         default_value = 200,  -- Factorio default for science packs
         minimum_value = 1,
         maximum_value = 10000,
-        order = "d"
+        order = "e"
     },
     -- Fluids in barrels
     {
@@ -50,7 +60,7 @@ data:extend({
         default_value = 10,  -- Factorio default for barrels
         minimum_value = 1,
         maximum_value = 10000,
-        order = "e"
+        order = "f"
     },
     -- Ammunition
     {
@@ -60,7 +70,7 @@ data:extend({
         default_value = 200,  -- Factorio default for ammo
         minimum_value = 1,
         maximum_value = 10000,
-        order = "f"
+        order = "g"
     },
     -- Modules
     {
@@ -70,7 +80,7 @@ data:extend({
         default_value = 50,  -- Factorio default for modules
         minimum_value = 1,
         maximum_value = 10000,
-        order = "g"
+        order = "h"
     },
     -- Other items (default for everything else)
     {
@@ -80,6 +90,6 @@ data:extend({
         default_value = 100,  -- Factorio default for misc items
         minimum_value = 1,
         maximum_value = 10000,
-        order = "h"
+        order = "i"
     },
 })
