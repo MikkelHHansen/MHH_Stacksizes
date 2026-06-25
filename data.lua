@@ -7,6 +7,8 @@ local plates_stack = settings.startup["mhh-stacksize-plates"].value
 local intermediates_stack = settings.startup["mhh-stacksize-intermediates"].value
 local science_stack = settings.startup["mhh-stacksize-science"].value
 local barrels_stack = settings.startup["mhh-stacksize-barrels"].value
+local ammo_stack = settings.startup["mhh-stacksize-ammo"].value
+local modules_stack = settings.startup["mhh-stacksize-modules"].value
 local other_stack = settings.startup["mhh-stacksize-other"].value
 
 -- Items/equipment that should NOT have their stack sizes modified
@@ -14,8 +16,6 @@ local excluded_types = {
     ["item-with-entity-data"] = true,  -- Buildings, vehicles, etc.
     ["armor"] = true,                   -- Power armor
     ["gun"] = true,                     -- Weapons
-    ["module"] = true,                  -- Modules for buildings/armor
-    ["ammo"] = true,                    -- Ammunition
 }
 
 -- Additional exclusions by subgroup (for equipment grid items)
@@ -93,7 +93,17 @@ local function should_exclude(item)
 end
 
 -- Function to determine what stack size to use for an item
-local function get_stack_size_for_item(name, item)
+local function get_stack_size_for_item(name, item, item_type)
+    -- Check if it's ammo
+    if item_type == "ammo" then
+        return ammo_stack
+    end
+    
+    -- Check if it's a module
+    if item_type == "module" then
+        return modules_stack
+    end
+    
     -- Check if it's a raw material
     if raw_materials[name] or (item.subgroup and string.find(item.subgroup, "raw%-resource")) then
         return raw_materials_stack
@@ -155,7 +165,7 @@ for _, item_type in pairs(item_types) do
                         if item_type == "tool" then
                             item.stack_size = science_stack
                         else
-                            item.stack_size = get_stack_size_for_item(name, item)
+                            item.stack_size = get_stack_size_for_item(name, item, item_type)
                         end
                     end
                 end
