@@ -65,6 +65,10 @@ local excluded_items = {
     ["se-arcosphere-b"] = true,
     ["se-arcosphere-c"] = true,
     ["se-arcosphere-d"] = true,
+    ["se-arcosphere-e"] = true,
+    ["se-arcosphere-f"] = true,
+    ["se-arcosphere-g"] = true,
+    ["se-arcosphere-h"] = true,
     ["se-arcosphere-collector"] = true,
     ["se-navigation-satellite"] = true,
 }
@@ -237,8 +241,8 @@ for _, item_type in pairs(item_types) do
                     -- Set the stack size based on item category
                     if item.stack_size then
                         -- For science packs (tools), use science stack size
-                        -- Includes space-science-pack
-                        if item_type == "tool" then
+                        -- Includes all vanilla science packs and space-science-pack
+                        if item_type == "tool" or name == "space-science-pack" then
                             item.stack_size = science_stack
                         -- For SE data items (used in research), use science stack size
                         elseif item.subgroup and string.find(item.subgroup, "^data") then
