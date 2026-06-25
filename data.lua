@@ -16,6 +16,13 @@ local excluded_types = {
     ["item-with-entity-data"] = true,  -- Buildings, vehicles, etc.
     ["armor"] = true,                   -- Power armor
     ["gun"] = true,                     -- Weapons
+    ["selection-tool"] = true,          -- Selection tools (must be stack_size=1)
+    ["blueprint-book"] = true,          -- Blueprint books (must be stack_size=1)
+    ["upgrade-item"] = true,            -- Upgrade planner (must be stack_size=1)
+    ["deconstruction-item"] = true,     -- Deconstruction planner (must be stack_size=1)
+    ["blueprint"] = true,               -- Blueprints (must be stack_size=1)
+    ["copy-paste-tool"] = true,         -- Copy-paste tool (must be stack_size=1)
+    ["spidertron-remote"] = true,       -- Spidertron remote (must be stack_size=1)
 }
 
 -- Additional exclusions by subgroup (for equipment grid items)
