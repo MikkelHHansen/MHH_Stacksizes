@@ -1,13 +1,12 @@
 {
   "name": "MHH_Stacksizes",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "title": "MHH Stack Sizes",
   "author": "Bumlebien",
   "factorio_version": "2.0",
   "dependencies": [
     "base >= 2.0",
-    "(?) space-exploration",
-    "! space-exploration-postprocess"
+    "(?) space-exploration"
   ],
   "description": "Configurable stack sizes for all items except buildings and equipment. Set custom stack sizes for different item categories in the mod settings. Compatible with all mods including Space Exploration."
 }
