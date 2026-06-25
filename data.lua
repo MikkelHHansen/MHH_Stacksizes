@@ -109,7 +109,8 @@ local function should_exclude(item, name)
     end
     
     -- Exclude items with "satellite" in the name (SE navigation satellites, etc.)
-    if string.find(name, "satellite") then
+    -- BUT allow satellite-telemetry (it's a data item for science)
+    if string.find(name, "satellite") and not string.find(name, "telemetry") then
         return true
     end
     
