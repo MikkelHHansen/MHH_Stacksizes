@@ -108,6 +108,11 @@ local function should_exclude(item, name)
         return true
     end
     
+    -- Exclude items with "satellite" in the name (SE navigation satellites, etc.)
+    if string.find(name, "satellite") then
+        return true
+    end
+    
     -- Check if it's marked as not stackable (like red-wire, green-wire)
     if item.flags then
         for _, flag in pairs(item.flags) do
