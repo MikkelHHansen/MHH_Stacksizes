@@ -218,6 +218,9 @@ for _, item_type in pairs(item_types) do
                         -- For science packs (tools), use science stack size
                         if item_type == "tool" then
                             item.stack_size = science_stack
+                        -- For SE data items (used in research), use science stack size
+                        elseif item.subgroup and string.find(item.subgroup, "^data") then
+                            item.stack_size = science_stack
                         else
                             item.stack_size = get_stack_size_for_item(name, item, item_type)
                         end
