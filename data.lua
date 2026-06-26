@@ -156,8 +156,9 @@ local function get_stack_size_for_item(name, item, item_type)
         return ammo_stack
     end
     
-    -- Check if it's a module
-    if item_type == "module" then
+    -- Check if it's a module (by type or name pattern)
+    -- This catches modded modules (e.g. SE modules 4-9) that may use non-"module" prototypes
+    if item_type == "module" or string.find(name, "module") then
         return modules_stack
     end
     
