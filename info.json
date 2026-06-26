@@ -6,7 +6,8 @@
   "factorio_version": "2.0",
   "dependencies": [
     "base >= 2.0",
-    "(?) space-exploration"
+    "(?) space-exploration",
+    "(?) space-exploration-postprocess"
   ],
   "description": "Configurable stack sizes for all items except buildings and equipment. Set custom stack sizes for different item categories including full Space Exploration support. Compatible with all mods."
 }

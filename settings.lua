@@ -92,6 +92,16 @@ data:extend({
         maximum_value = 10000,
         order = "i"
     },
+    -- Rocket parts (cargo pod, fuel tank, sections)
+    {
+        type = "int-setting",
+        name = "mhh-stacksize-rocket-parts",
+        setting_type = "startup",
+        default_value = 25,
+        minimum_value = 1,
+        maximum_value = 10000,
+        order = "j"
+    },
     -- Other items (default for everything else)
     {
         type = "int-setting",
@@ -100,6 +110,6 @@ data:extend({
         default_value = 100,  -- Factorio default for misc items
         minimum_value = 1,
         maximum_value = 10000,
-        order = "j"
+        order = "k"
     },
 })

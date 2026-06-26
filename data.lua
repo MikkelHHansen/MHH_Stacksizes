@@ -11,6 +11,7 @@ local barrels_stack = settings.startup["mhh-stacksize-barrels"].value
 local fuel_stack = settings.startup["mhh-stacksize-fuel"].value
 local ammo_stack = settings.startup["mhh-stacksize-ammo"].value
 local modules_stack = settings.startup["mhh-stacksize-modules"].value
+local rocket_parts_stack = settings.startup["mhh-stacksize-rocket-parts"].value
 local other_stack = settings.startup["mhh-stacksize-other"].value
 
 -- Items/equipment that should NOT have their stack sizes modified
@@ -37,7 +38,7 @@ local excluded_subgroups = {
     ["inserter"] = true,                -- Inserters (placeable)
 }
 
--- Space Exploration material subgroups for raw materials
+-- Space Exploration material subgroups for raw materials (ores only, processed items match specific patterns)
 local se_material_subgroups = {
     ["beryllium"] = true,
     ["holmium"] = true,
@@ -46,6 +47,19 @@ local se_material_subgroups = {
     ["cryonite"] = true,
     ["vulcanite"] = true,
     ["vitamelange"] = true,
+}
+
+-- Subgroups for items that should be categorized as intermediates
+local intermediate_subgroups = {
+    ["canister"] = true,
+    ["canister-full"] = true,
+    ["specimen"] = true,
+    ["recycling"] = true,
+    ["advanced-assembling"] = true,
+    ["electronic"] = true,
+    ["processor"] = true,
+    ["specialist-assembling"] = true,
+    ["observation-frame"] = true,
 }
 
 -- Category definitions for different item types
@@ -96,12 +110,22 @@ local intermediates = {
     ["electric-engine-unit"] = true,
     ["flying-robot-frame"] = true,
     ["low-density-structure"] = true,
-    ["rocket-fuel"] = true,
     ["rocket-control-unit"] = true,
     ["battery"] = true,
     ["plastic-bar"] = true,
     ["sulfur"] = true,
     ["explosives"] = true,
+    ["stone-tablet"] = true,
+    ["sand"] = true,
+    ["glass"] = true,
+    ["se-heat-shielding"] = true,
+    ["motor"] = true,
+    ["electric-motor"] = true,
+}
+
+-- Items with place_result that should NOT be excluded (e.g. rocket parts that place cargo pods)
+local placeable_exceptions = {
+    ["se-cargo-rocket-cargo-pod"] = true,
 }
 
 -- Function to check if an item should be excluded
@@ -117,7 +141,11 @@ local function should_exclude(item, name)
         return true
     end
     
-    -- Check if it's marked as not stackable (like red-wire, green-wire)
+    -- Check if it's marked as not stackable (like red-wire, green-wire, empty-module-slot)
+    -- Factorio 2.0: may be in flags array or a direct not-stackable property
+    if item["not-stackable"] then
+        return true
+    end
     if item.flags then
         for _, flag in pairs(item.flags) do
             if flag == "not-stackable" then
@@ -127,7 +155,8 @@ local function should_exclude(item, name)
     end
     
     -- Check if it's a building or vehicle (has place_result)
-    if item.place_result then
+    -- But allow exceptions like rocket cargo pods
+    if item.place_result and not placeable_exceptions[name] then
         return true
     end
     
@@ -175,13 +204,15 @@ local function get_stack_size_for_item(name, item, item_type)
     end
     
     -- Check if it's a raw material (ore)
-    -- Pattern: ends with "-ore", contains "ore-", or is in raw-resource subgroup
-    -- Also includes SE special materials (vitamelange, vulcanite, cryonite when not processed)
+    -- Pattern: ends with "-ore", contains "ore-", powder, crushed, or is in raw-resource subgroup
+    -- Also includes SE water/methane ice and raw-material subgroups
     if string.find(name, "%-ore$") or string.find(name, "ore%-") or
+       string.find(name, "%-powder$") or string.find(name, "%-crushed$") or
        (item.subgroup and (
            string.find(item.subgroup, "raw%-resource") or
            string.find(item.subgroup, "%-ore") or
-           se_material_subgroups[item.subgroup]
+           item.subgroup == "water" or
+           item.subgroup == "oil"
        )) then
         return raw_materials_stack
     end
@@ -195,17 +226,28 @@ local function get_stack_size_for_item(name, item, item_type)
     end
     
     -- Check if it's an intermediate product
-    -- Includes: circuits, gears, powders, crushed materials, crystals, sulfates, chlorides, etc.
-    if string.find(name, "%-powder$") or 
-       string.find(name, "%-crushed$") or
-       string.find(name, "%-crystal$") or 
+    -- Includes: circuits, gears, crystals, sulfates, chlorides, blastcakes, rods, and SE subgroups
+    if string.find(name, "%-crystal$") or 
        string.find(name, "%-sulfate$") or
        string.find(name, "%-chloride$") or
        string.find(name, "%-blastcake$") or
        string.find(name, "%-rod$") or
        intermediates[name] or 
-       (item.subgroup and string.find(item.subgroup, "intermediate%-product")) then
+       (item.subgroup and (
+           string.find(item.subgroup, "intermediate%-product") or
+           intermediate_subgroups[item.subgroup]
+       )) then
         return intermediates_stack
+    end
+    
+    -- SE material subgroup catch-all: remaining items in SE material subgroups are raw ores
+    if item.subgroup and se_material_subgroups[item.subgroup] then
+        return raw_materials_stack
+    end
+    
+    -- Check if it's a rocket part (cargo pod, fuel tank, rocket sections)
+    if item.subgroup and item.subgroup == "rocket-part" then
+        return rocket_parts_stack
     end
     
     -- Check if it's a barrel
@@ -213,8 +255,8 @@ local function get_stack_size_for_item(name, item, item_type)
         return barrels_stack
     end
     
-    -- Check if it's fuel (by subgroup)
-    if item.subgroup and item.subgroup == "fuel" then
+    -- Check if it's fuel (by subgroup or fuel_value property)
+    if (item.subgroup and item.subgroup == "fuel") or item.fuel_value then
         return fuel_stack
     end
     
