@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.1.7
+Date: 2026-06-30
+  Changes:
+    - Fixed stone not getting its stack size changed: place_as_tile caused it to be excluded
+    - Stone-brick is now categorized as plates (excluded from place_as_tile check, categorized via %-brick$ rule)
+---------------------------------------------------------------------------------------------------
 Version: 4.1.6
 Date: 2026-06-30
   Changes:

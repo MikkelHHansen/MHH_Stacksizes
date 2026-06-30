@@ -43,6 +43,8 @@ local excluded_types = {
 
 local placeable_exceptions = {
   ["se-cargo-rocket-cargo-pod"] = true,
+  ["stone"] = true,
+  ["stone-brick"] = true,
 }
 
 local item_types = {
@@ -109,7 +111,7 @@ function categories.should_exclude(item, name, item_type)
     return true
   end
 
-  if item.place_as_tile then
+  if item.place_as_tile and not placeable_exceptions[name] then
     return true
   end
 
@@ -182,6 +184,7 @@ function categories.categorize(name, item, item_type)
 
   -- Rule 7: Plates (checked BEFORE raw-material subgroup to catch se-beryllium-plate etc.)
   if string.find(name, "%-plate$") or
+     string.find(name, "%-brick$") or
      (sub and sub == "uranium") or
      (sub and sub == "raw-material") then
     return "plates"
