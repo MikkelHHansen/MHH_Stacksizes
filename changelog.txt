@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.1.8
+Date: 2026-06-30
+  Changes:
+    - Added GPL v3 LICENSE file (matching other MHH mods)
+    - Added source and homepage fields to info.json
+---------------------------------------------------------------------------------------------------
 Version: 4.1.7
 Date: 2026-06-30
   Changes:
