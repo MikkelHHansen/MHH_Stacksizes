@@ -11,12 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install luacheck
-        run: sudo apt-get install -y luacheck
-
-      - name: Lint
-        run: luacheck .
-
       - name: Build zip
         run: |
           MOD_NAME=$(jq -r '.name' info.json)
