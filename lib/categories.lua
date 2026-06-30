@@ -265,40 +265,42 @@ function categories.process_all()
     end
   end
 
-  -- Log report
-  log("")
-  log("=== MHH_Stacksizes 4.0.0 Report ===")
-  local total = 0
-  local order = {"raw-materials","plates","ingots","intermediates","science","fuel-burner","fuel-advanced","ammo-basic","ammo-advanced","ammo-capsule","modules","rocket-parts","data","barrels"}
-  for _, cat in ipairs(order) do
-    local c = counts[cat] or 0
-    total = total + c
-    if c > 0 then
-      log(string.format("  %-20s: %d items", cat, c))
-    end
-  end
-  log(string.format("  Total categorized:   %d", total))
-  log(string.format("  Excluded:            %d", excluded_count))
-  log(string.format("  Keep-default:        %d", keep_default_count))
-  if #uncategorized > 0 then
-    log(string.format("  UNCATEGORIZED:       %d items <<< ERROR >>>", #uncategorized))
-    for _, u in ipairs(uncategorized) do
-      local extra = ""
-      if u.item then
-        local fv = u.item.fuel_value
-        if fv then extra = extra .. string.format(" fuel=%s", fv) end
-        local fc = u.item.fuel_category
-        if fc then extra = extra .. string.format(" fuel_cat=%s", fc) end
-        if u.item.module_effects then extra = extra .. " has_module_effects" end
-        if u.item.placed_as_equipment_result then extra = extra .. " placed_as_eq=" .. u.item.placed_as_equipment_result end
+  -- Log report (only when debug setting is enabled)
+  if settings.startup["mhh-stacksize-debug-log"].value then
+    log("")
+    log("=== MHH_Stacksizes 4.0.0 Report ===")
+    local total = 0
+    local order = {"raw-materials","plates","ingots","intermediates","science","fuel-burner","fuel-advanced","ammo-basic","ammo-advanced","ammo-capsule","modules","rocket-parts","data","barrels"}
+    for _, cat in ipairs(order) do
+      local c = counts[cat] or 0
+      total = total + c
+      if c > 0 then
+        log(string.format("  %-20s: %d items", cat, c))
       end
-      log(string.format("    %-35s type=%-15s sub=%-25s%s", u.name, u.proto_type, u.subgroup, extra))
     end
-  else
-    log("  Uncategorized:       0 (none) - OK")
+    log(string.format("  Total categorized:   %d", total))
+    log(string.format("  Excluded:            %d", excluded_count))
+    log(string.format("  Keep-default:        %d", keep_default_count))
+    if #uncategorized > 0 then
+      log(string.format("  UNCATEGORIZED:       %d items <<< ERROR >>>", #uncategorized))
+      for _, u in ipairs(uncategorized) do
+        local extra = ""
+        if u.item then
+          local fv = u.item.fuel_value
+          if fv then extra = extra .. string.format(" fuel=%s", fv) end
+          local fc = u.item.fuel_category
+          if fc then extra = extra .. string.format(" fuel_cat=%s", fc) end
+          if u.item.module_effects then extra = extra .. " has_module_effects" end
+          if u.item.placed_as_equipment_result then extra = extra .. " placed_as_eq=" .. u.item.placed_as_equipment_result end
+        end
+        log(string.format("    %-35s type=%-15s sub=%-25s%s", u.name, u.proto_type, u.subgroup, extra))
+      end
+    else
+      log("  Uncategorized:       0 (none) - OK")
+    end
+    log("=== End Report ===")
+    log("")
   end
-  log("=== End Report ===")
-  log("")
 end
 
 return categories

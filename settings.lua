@@ -125,4 +125,11 @@ data:extend({
     maximum_value = 10000,
     order = "n"
   },
+  {
+    type = "bool-setting",
+    name = "mhh-stacksize-debug-log",
+    setting_type = "startup",
+    default_value = false,
+    order = "z"
+  },
 })
