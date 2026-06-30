@@ -272,7 +272,9 @@ function categories.process_all()
   -- Log report (only when debug setting is enabled)
   if settings.startup["mhh-stacksize-debug-log"].value then
     log("")
-    log("=== MHH_Stacksizes " .. mods["MHH_Stacksizes"] .. " Report ===")
+    local mhh_ver = mods["MHH_Stacksizes"]
+    if type(mhh_ver) == "table" then mhh_ver = mhh_ver.version end
+    log("=== MHH_Stacksizes " .. (mhh_ver or "unknown") .. " Report ===")
     local total = 0
     local order = {"raw-materials","plates","ingots","intermediates","science","fuel-burner","fuel-advanced","ammo-basic","ammo-advanced","ammo-capsule","modules","rocket-parts","data","barrels"}
     for _, cat in ipairs(order) do
