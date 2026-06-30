@@ -272,7 +272,7 @@ function categories.process_all()
   -- Log report (only when debug setting is enabled)
   if settings.startup["mhh-stacksize-debug-log"].value then
     log("")
-    log("=== MHH_Stacksizes 4.0.0 Report ===")
+    log("=== MHH_Stacksizes " .. mods["MHH_Stacksizes"].version .. " Report ===")
     local total = 0
     local order = {"raw-materials","plates","ingots","intermediates","science","fuel-burner","fuel-advanced","ammo-basic","ammo-advanced","ammo-capsule","modules","rocket-parts","data","barrels"}
     for _, cat in ipairs(order) do
