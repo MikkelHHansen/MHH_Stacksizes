@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.0.0
+Date: 2026-06-30
+  Changes:
+    - Complete rewrite with dynamic property-based item categorization
+    - Split "Fuel" into Burner (default 50) and Advanced (default 10)
+    - Split "Ammo" into Basic (200), Advanced (100), and Capsules (100)
+    - Removed "Other" category (repair-pack now excluded by type)
+    - Added "Data" category for SE data items (default 100)
+    - Module detection uses module_effects property (not name patterns)
+    - Added data-updates.lua phase for mods that add items in data.lua
+    - data-final-fixes.lua re-runs full detection to catch postprocess changes
+    - Added priority-based detection chain: exclusions → keep-default → properties → subgroup → name
+    - 14 configurable settings (was 11)
+---------------------------------------------------------------------------------------------------
 Version: 3.1.1
 Date: 2026-06-27
   Changes:
