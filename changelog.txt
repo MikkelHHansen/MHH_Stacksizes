@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.1.6
+Date: 2026-06-30
+  Changes:
+    - Changed author to Bumlebien
+---------------------------------------------------------------------------------------------------
+Version: 4.1.5
+Date: 2026-06-30
+  Changes:
+    - Replaced thumbnail with a collage of stackable items (ores, plates, circuits, science, fuel, ammo, modules, etc.)
+---------------------------------------------------------------------------------------------------
 Version: 4.1.4
 Date: 2026-06-30
   Changes:
