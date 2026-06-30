@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.1.9
+Date: 2026-06-30
+  Changes:
+    - Fixed nil version error in debug log: mods table in Factorio 2.0 stores version strings directly, not tables
+    - Updated source to release repo URL and homepage to mod portal URL
+---------------------------------------------------------------------------------------------------
 Version: 4.1.8
 Date: 2026-06-30
   Changes:
