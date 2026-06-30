@@ -3,8 +3,8 @@
   "version": "4.1.8",
   "title": "MHH Stack Sizes",
   "author": "Bumlebien",
-  "source": "https://github.com/MikkelHHansen/FactorioMods",
-  "homepage": "https://github.com/MikkelHHansen/FactorioMods",
+  "source": "https://github.com/MikkelHHansen/MHH_Stacksizes",
+  "homepage": "https://github.com/MikkelHHansen/MHH_Stacksizes",
   "factorio_version": "2.0",
   "dependencies": [
     "base >= 2.0",
