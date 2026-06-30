@@ -1,4 +1,24 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.1.4
+Date: 2026-06-30
+  Changes:
+    - Improved mod description in info.json for clarity and completeness
+---------------------------------------------------------------------------------------------------
+Version: 4.1.3
+Date: 2026-06-30
+  Changes:
+    - Added range notation [1-10000] to all int-setting descriptions for clarity
+---------------------------------------------------------------------------------------------------
+Version: 4.1.2
+Date: 2026-06-30
+  Changes:
+    - Fixed stone not being categorized as raw-materials when SE changes its subgroup
+---------------------------------------------------------------------------------------------------
+Version: 4.1.1
+Date: 2026-06-30
+  Changes:
+    - Fixed "Unknown key" for debug-log setting: added missing locale name entry
+---------------------------------------------------------------------------------------------------
 Version: 4.1.0
 Date: 2026-06-30
   Changes:

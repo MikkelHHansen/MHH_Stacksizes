@@ -193,7 +193,8 @@ function categories.categorize(name, item, item_type)
   end
 
   -- Rule 6b: Raw materials — subgroup or name-pattern based (after plate/ingot checks so processed forms fall through correctly)
-  if (sub and compat.se_material_subgroups[sub]) or
+  if name == "stone" or
+     (sub and compat.se_material_subgroups[sub]) or
      string.find(name, "%-ore$") or
      string.find(name, "%-crushed$") or
      (sub and (sub == "raw-resource" or sub == "stone" or sub == "water" or sub == "oil")) then

@@ -1,6 +1,6 @@
 {
   "name": "MHH_Stacksizes",
-  "version": "4.1.0",
+  "version": "4.1.4",
   "title": "MHH Stack Sizes",
   "author": "Bumlebien",
   "factorio_version": "2.0",
@@ -10,5 +10,5 @@
     "(?) space-exploration",
     "(?) space-exploration-postprocess"
   ],
-  "description": "Configurable stack sizes for all items except buildings and equipment. Dynamic property-based item categorization for broad mod compatibility."
+  "description": "Configurable stack sizes for all items via startup settings. Items are dynamically categorized by properties (raw materials, plates, science, fuel, ammo, etc.) for seamless compatibility with vanilla, Space Age, Space Exploration, Krastorio 2, and other overhaul mods. Buildings and equipment keep their default stack sizes."
 }
