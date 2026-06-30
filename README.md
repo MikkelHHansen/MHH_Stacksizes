@@ -1,85 +1,84 @@
 # MHH Stack Sizes
 
-A Factorio mod that provides configurable stack sizes for all items except buildings and equipment.
+Configurable stack sizes for almost every item in Factorio — ores, plates, ingots, intermediates, science, fuel, ammo, modules, barrels, rocket parts, data items, and more. Items are dynamically categorized by their properties (type, subgroup, fuel value, name patterns), so it works seamlessly with vanilla, Space Age, Space Exploration, Krastorio 2, Bob's/Angel's, and most other mods without explicit support.
 
-## Features
+## Categories
 
-- **9 Configurable Categories**: Raw materials, plates, ingots, intermediates, science packs, barrels, ammunition, modules, and other items
-- **Full Space Exploration Support**: Automatically detects and categorizes SE materials (beryllium, holmium, iridium, naquium, cryonite, vulcanite, vitamelange)
-- **Pattern-Based Detection**: Works with most mods without explicit support
-- **Intelligent Categorization**: Uses item names and subgroups to automatically categorize modded items
+| Category | Setting Name | Default | What Goes In |
+|---|---|---|---|
+| Raw Materials | `mhh-stacksize-raw-materials` | 50 | Ores, crushed materials, stone, SE cryonite/vulcanite/vitamelange |
+| Plates | `mhh-stacksize-plates` | 100 | Plates, bricks, uranium processing items |
+| Ingots | `mhh-stacksize-ingots` | 50 | All ingots (vanilla & SE) |
+| Intermediates | `mhh-stacksize-intermediates` | 200 | Circuits, gears, engines, SE sulfates/chlorides/rods/crystals |
+| Science | `mhh-stacksize-science` | 200 | All science packs |
+| Fuel — Burner | `mhh-stacksize-fuel-burner` | 50 | Burner fuels (coal, wood, solid fuel) |
+| Fuel — Advanced | `mhh-stacksize-fuel-advanced` | 10 | Rocket fuel, nuclear fuel, chemical fuels |
+| Ammo — Basic | `mhh-stacksize-ammo-basic` | 200 | Bullets, shotgun shells |
+| Ammo — Advanced | `mhh-stacksize-ammo-advanced` | 100 | Piercing/uranium ammo, rockets, artillery shells, cannon shells |
+| Ammo — Capsule | `mhh-stacksize-ammo-capsule` | 100 | Grenades, capsules, combat robots |
+| Modules | `mhh-stacksize-modules` | 50 | All modules |
+| Rocket Parts | `mhh-stacksize-rocket-parts` | 25 | Rocket parts, satellite, cargo rocket sections |
+| Data | `mhh-stacksize-data` | 100 | SE data cards |
+| Barrels | `mhh-stacksize-barrels` | 10 | All fluid barrels |
 
-## Installation
+## How Categorization Works
 
-1. Copy the `MHH_Stacksizes` folder to your Factorio mods directory:
-   - Windows: `%appdata%\Factorio\mods`
-   - Linux: `~/.factorio/mods`
-   - Mac: `~/Library/Application Support/factorio/mods`
+Instead of maintaining a hardcoded item list, the mod detects items by their prototype properties:
 
-2. Launch Factorio and enable the mod in the Mods menu
-
-3. Configure stack sizes in Settings > Mod settings > Startup
-
-## Stack Size Categories
-
-### Raw Materials (Default: 50)
-- Vanilla ores (iron-ore, copper-ore, coal, stone, uranium-ore)
-- SE ores (beryllium-ore, holmium-ore, iridium-ore, naquium-ore)
-- SE special materials (cryonite, vulcanite, vitamelange)
-- Other modded ores
-
-### Plates (Default: 100)
-- Vanilla plates (iron-plate, copper-plate, steel-plate)
-- SE plates (beryllium-plate, holmium-plate, iridium-plate, naquium-plate)
-- Other modded plates
-
-### Ingots (Default: 50)
-- SE ingots (iron-ingot, steel-ingot, copper-ingot, beryllium-ingot, holmium-ingot, iridium-ingot, naquium-ingot)
-- Other modded ingots
-
-### Intermediate Products (Default: 200)
-- Vanilla intermediates (circuits, gears, engines, etc.)
-- SE processed materials (powders, crushed, crystals, sulfates, chlorides, rods, etc.)
-- Other modded intermediate products
-
-### Science Packs (Default: 200)
-- All science packs
-
-### Barrels (Default: 10)
-- All fluid barrels
-
-### Ammunition (Default: 200)
-- All ammunition types
-
-### Modules (Default: 50)
-- All modules
-
-### Other Items (Default: 100)
-- Everything else that doesn't fit above categories
-
-## Compatibility
-
-- **Space Exploration**: Full support for all SE materials and processing stages
-- **Krastorio 2**: Should work via pattern detection (not explicitly tested)
-- **Bob's/Angel's Mods**: Should work via pattern detection
-- **Most other mods**: Pattern-based detection handles common naming conventions
+1. **Type-based** — Modules (type=`module` or has `module_effects`), ammo (type=`ammo`), capsules (type=`capsule`)
+2. **Fuel-based** — Any item with `fuel_value > 0` and a `fuel_category` (burner vs. chemical/other)
+3. **Subgroup-based** — Science packs, intermediate products, rocket parts, data items, barrels
+4. **Name-pattern-based** — `*-plate`, `*-brick`, `*-ingot`, `*-ore`, `*-crushed`, `*-sulfate`, `*-chloride`, `*-rod`, `*-crystal`
+5. **Priority ordering** — Fuel is checked early (so SE ores with fuel_value land in fuel, not raw-materials); plates/ingots checked before raw-materials (so `se-beryllium-plate` goes to plates, not raw-materials); chemical intermediate patterns checked before raw-materials
 
 ## Excluded Items
 
-The following items are never modified (must remain stack_size=1 or have special requirements):
-- Buildings and entities
-- Armor and equipment
-- Weapons (guns)
-- Blueprint tools
-- Planning tools (upgrade planner, deconstruction planner, etc.)
-- Items with "not-stackable" flag
+These items keep their default stack sizes (never modified):
 
-## Version History
+- **Buildings** — any item with `place_result` (except known exceptions like stone, stone-brick, SE cargo pod)
+- **Armor & Equipment** — type=`armor`, type=`gun`, `placed_as_equipment_result`, or in equipment subgroups
+- **Tools** — blueprints, upgrade/deconstruction planners, selection tools, copy-paste tools, repair tools, spidertron remotes, rail planners
+- **Non-stackable** — items with `not-stackable` flag or `not-stackable` in their flags array
+- **Hidden/Parameter** — hidden items and parameter items (virtual signal types)
+- **Special keep_default items** — arcospheres, navigation satellites, probes, processors (stack_size=1 items that shouldn't change)
 
-- **3.0.0** - Added Space Exploration compatibility, new ingots category, pattern-based item detection
-- 2.1.3 - Fix stack_size=1 requirement for planning tools
-- 2.1.2 - Fix not-stackable items error (red-wire, green-wire)
-- 2.1.1 - Remove incompatibility with space-exploration-postprocess
-- 2.1.0 - Add ammunition and modules as configurable categories
-- 2.0.0 - Configurable stack sizes with in-game settings
-- 1.0.0 - Initial release
+## Settings
+
+All settings are **startup** type (require a game restart):
+
+| Setting | Type | Default | Description |
+|---|---|---|---|
+| mhh-stacksize-raw-materials | int | 50 | Raw materials stack size (1–10000) |
+| mhh-stacksize-plates | int | 100 | Plates stack size (1–10000) |
+| mhh-stacksize-ingots | int | 50 | Ingots stack size (1–10000) |
+| mhh-stacksize-intermediates | int | 200 | Intermediate products stack size (1–10000) |
+| mhh-stacksize-science | int | 200 | Science packs stack size (1–10000) |
+| mhh-stacksize-barrels | int | 10 | Barrels stack size (1–10000) |
+| mhh-stacksize-fuel-burner | int | 50 | Burner fuels stack size (1–10000) |
+| mhh-stacksize-fuel-advanced | int | 10 | Advanced fuels stack size (1–10000) |
+| mhh-stacksize-ammo-basic | int | 200 | Basic ammo stack size (1–10000) |
+| mhh-stacksize-ammo-advanced | int | 100 | Advanced ammo stack size (1–10000) |
+| mhh-stacksize-ammo-capsule | int | 100 | Capsules/combat items stack size (1–10000) |
+| mhh-stacksize-modules | int | 50 | Modules stack size (1–10000) |
+| mhh-stacksize-rocket-parts | int | 25 | Rocket parts stack size (1–10000) |
+| mhh-stacksize-data | int | 100 | Data items stack size (1–10000) |
+| mhh-stacksize-debug-log | bool | false | Enable debug logging to factorio-current.log |
+
+## Compatibility
+
+| Mod | Status |
+|---|---|
+| **Space Age** | Detected — space platform items, asteroid chunks, promethium handled |
+| **Space Exploration** | Full support — all materials, processing stages, arcosphere exception, data cards, cargo rocket sections |
+| **Krastorio 2** | Works via pattern detection |
+| **Bob's / Angel's** | Works via pattern detection |
+| **Other mods** | Pattern-based detection handles common naming conventions |
+
+## Debug Logging
+
+Enable `mhh-stacksize-debug-log` in startup settings to get a per-category item count report in `factorio-current.log`. The report runs in all three data phases (data.lua, data-updates.lua, data-final-fixes.lua) and shows categorized counts, excluded items, and any uncategorized items with full prototype details.
+
+## Requirements
+
+- **Factorio 2.0**
+- Optional: Space Age, Space Exploration, Krastorio 2
