@@ -1,0 +1,45 @@
+name: Deploy to Mod Portal
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install luacheck
+        run: sudo apt-get install -y luacheck
+
+      - name: Lint
+        run: luacheck .
+
+      - name: Build zip
+        run: |
+          MOD_NAME=$(jq -r '.name' info.json)
+          VERSION=$(jq -r '.version' info.json)
+          git archive --format=zip --prefix="$MOD_NAME/" \
+            --output="${MOD_NAME}_${VERSION}.zip" HEAD
+
+      - name: Upload to Factorio Mod Portal
+        env:
+          FACTORIO_API_KEY: ${{ secrets.FACTORIO_API_KEY }}
+        run: |
+          MOD_NAME=$(jq -r '.name' info.json)
+          VERSION=$(jq -r '.version' info.json)
+          ZIP_FILE="${MOD_NAME}_${VERSION}.zip"
+          RESPONSE=$(curl -s -X POST \
+            -H "Authorization: Bearer $FACTORIO_API_KEY" \
+            -d "mod=$MOD_NAME" \
+            https://mods.factorio.com/api/v2/mods/releases/init_upload)
+          UPLOAD_URL=$(echo "$RESPONSE" | jq -r '.upload_url')
+          if [ "$UPLOAD_URL" = "null" ]; then
+            echo "init_upload failed: $RESPONSE"
+            exit 1
+          fi
+          curl -s -X POST \
+            -F "file=@$ZIP_FILE" \
+            "$UPLOAD_URL"
